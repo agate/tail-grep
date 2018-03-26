@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Grep + Tail",
   "scripts": {
-    "dev": "yarn install && rimraf dist && webpack-dev-server -d",
+    "dev": "yarn install && rimraf dist && webpack-dev-server -d --open",
     "build:production": "yarn install && rimraf dist && webpack -p",
     "server": "node src/server/index.js"
   },
