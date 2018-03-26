@@ -1,0 +1,5 @@
+version: '3'
+services:
+  tail-grep:
+    image: agate/tail-grep
+    build: .
