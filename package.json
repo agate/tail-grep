@@ -1,7 +1,7 @@
 {
   "name": "tail-grep",
   "version": "1.0.0",
-  "description": "Grep + Tail",
+  "description": "Grep & Tail",
   "scripts": {
     "dev": "yarn install && rimraf dist && webpack-dev-server -d --open",
     "build:production": "yarn install && rimraf dist && webpack -p",

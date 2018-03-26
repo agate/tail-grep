@@ -82,14 +82,14 @@ class App extends React.Component {
     return (
       <Layout className="layout">
         <Layout.Header className="layout-header">
-          Tail Grep
+          Tail & Grep
         </Layout.Header>
         <Layout.Content className="layout-content" style={{ padding: '0 50px' }}>
           <Divider />
           <div className="tags">
             {
               this.state.files.map((file) => {
-                const color = minimatch(file, this.state.fileNamePattern) ? '#108ee9' : null
+                const color = minimatch(file, this.state.fileNamePattern) ? '#1890ff' : null
                 return (
                   <Tag key={file} color={color}>{file}</Tag>
                 )
