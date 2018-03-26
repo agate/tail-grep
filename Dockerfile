@@ -6,9 +6,9 @@ RUN apk update && \
 
 ADD . /app
 WORKDIR /app
-RUN yarn install
+RUN yarn install && \
+    npm run build:production
+
+CMD [ "sh", "-c", "npm run server $TARGET_DIR" ]
 
 EXPOSE 3000
-
-ENTRYPOINT ["/sbin/init"]
-CMD ["npm", "run", "prod"]

@@ -4,7 +4,7 @@
   "description": "Grep + Tail",
   "scripts": {
     "dev": "yarn install && rimraf dist && webpack-dev-server -d",
-    "prod": "yarn install && rimraf dist && webpack -p",
+    "build:production": "yarn install && rimraf dist && webpack -p",
     "server": "node src/server/index.js"
   },
   "author": "agate",

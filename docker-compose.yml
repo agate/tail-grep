@@ -3,3 +3,5 @@ services:
   tail-grep:
     image: agate/tail-grep
     build: .
+    environment:
+      - TARGET_DIR=tmp

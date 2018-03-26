@@ -14,6 +14,11 @@ const PORT = parseInt(process.env.PORT) || 3000
 const GLOB_INTERNAL = (parseInt(process.env.GLOB_INTERNAL) || 10) * 1000
 const TARGET_DIR = process.argv[2]
 
+if (!TARGET_DIR) {
+  console.log("Please pass a root folder of your files!")
+  process.exit(1)
+}
+
 let FILES = []
 let TAILS = {}
 let SOCKET_ON_TAIL_CBS = {}
