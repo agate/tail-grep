@@ -3,5 +3,9 @@ services:
   tail-grep:
     image: agate/tail-grep
     build: .
+    volumes:
+      - /tmp:/tail-grep-tmp
     environment:
-      - TARGET_DIR=tmp
+      - TARGET_DIR=/tail-grep-tmp
+    ports:
+      - 3000:3000
