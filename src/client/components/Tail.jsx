@@ -105,7 +105,7 @@ class Tail extends React.Component {
           }
         </div>
 
-        <div className="tailLines" ref={el => { this.el = el }}>
+        <div className="tail-lines" ref={el => { this.el = el }}>
           {
             this.state.lines.map((line) => {
               return (

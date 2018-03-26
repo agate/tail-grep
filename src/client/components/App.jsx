@@ -78,6 +78,35 @@ class App extends React.Component {
     this.tails[pattern] = cb
   }
 
+  renderTabs() {
+    if (Object.keys(this.state.fileNamePatterns).length) {
+      return (
+        <Tabs
+          className="tabs"
+          hideAdd
+          type="editable-card"
+          onEdit={this.removeTail.bind(this)}
+        >
+          {
+            Object.keys(this.state.fileNamePatterns).map((pattern) => {
+              return (
+                <Tabs.TabPane
+                  tab={pattern}
+                  key={pattern}
+                  closable={true}>
+                  <Tail
+                    fileNamePattern={pattern}
+                    registerTail={this.registerTail.bind(this)}
+                  />
+                </Tabs.TabPane>
+              )
+            })
+          }
+        </Tabs>
+      )
+    }
+  }
+
   render() {
     return (
       <Layout className="layout">
@@ -85,8 +114,7 @@ class App extends React.Component {
           Tail & Grep
         </Layout.Header>
         <Layout.Content className="layout-content" style={{ padding: '0 50px' }}>
-          <Divider />
-          <div className="tags">
+          <div className="files">
             {
               this.state.files.map((file) => {
                 const color = minimatch(file, this.state.fileNamePattern) ? '#1890ff' : null
@@ -96,7 +124,6 @@ class App extends React.Component {
               })
             }
           </div>
-          <Divider />
           <Input.Search
             prefix={<Icon
               type="file-text"
@@ -106,28 +133,9 @@ class App extends React.Component {
             onChange={this.onFileNamePatternChange.bind(this)}
             onSearch={this.createNewTail.bind(this)}
           />
-          <Tabs
-            className="tabs"
-            hideAdd
-            type="editable-card"
-            onEdit={this.removeTail.bind(this)}
-          >
-            {
-              Object.keys(this.state.fileNamePatterns).map((pattern) => {
-                return (
-                  <Tabs.TabPane
-                    tab={pattern}
-                    key={pattern}
-                    closable={true}>
-                    <Tail
-                      fileNamePattern={pattern}
-                      registerTail={this.registerTail.bind(this)}
-                    />
-                  </Tabs.TabPane>
-                )
-              })
-            }
-          </Tabs>
+          {
+            this.renderTabs()
+          }
         </Layout.Content>
         <Layout.Footer style={{ textAlign: 'center' }}>
           Tail & Grep ©2018 Created by <a href="//github.com/agate">agate</a>.
