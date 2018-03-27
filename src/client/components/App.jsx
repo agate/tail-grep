@@ -107,6 +107,25 @@ class App extends React.Component {
     }
   }
 
+  renderFiles() {
+    let fileNamePattern = this.state.fileNamePattern
+    if (fileNamePattern == '') {
+      return this.state.files.map((file) => {
+        return (
+          <Tag key={file}>{file}</Tag>
+        )
+      })
+    } else {
+      return this.state.files.filter((file) => {
+        return minimatch(file, this.state.fileNamePattern)
+      }).map((file) => {
+        return (
+          <Tag key={file} color="#1890ff">{file}</Tag>
+        )
+      })
+    }
+  }
+
   render() {
     return (
       <Layout className="layout">
@@ -115,14 +134,7 @@ class App extends React.Component {
         </Layout.Header>
         <Layout.Content className="layout-content" style={{ padding: '0 50px' }}>
           <div className="files">
-            {
-              this.state.files.map((file) => {
-                const color = minimatch(file, this.state.fileNamePattern) ? '#1890ff' : null
-                return (
-                  <Tag key={file} color={color}>{file}</Tag>
-                )
-              })
-            }
+            { this.renderFiles() }
           </div>
           <Input.Search
             prefix={<Icon
