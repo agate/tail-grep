@@ -14,23 +14,37 @@ class Tail extends React.Component {
 
     this.logIdx = 0
 
-    props.registerTail(props.fileNamePattern, (line) => {
+    props.registerTail(props.fileNamePattern, (file, lines) => {
       const filters = Object.keys(this.state.filters)
-      const matches = filters.map((filter) => {
-        const regex = new RegExp(filter)
-        return line.match(regex)
-      }).filter((filter) => {
-        return filter
+      let stateLines = this.state.lines.concat([])
+
+      lines.forEach((line) => {
+        const matches = filters.map((filter) => {
+          const regex = new RegExp(filter)
+          return line.match(regex)
+        }).filter((filter) => {
+          return filter
+        })
+
+        if (matches.length == filters.length) {
+          stateLines.push({
+            idx: this.logIdx++,
+            file: file,
+            content: line,
+          })
+        }
       })
 
-      if (matches.length == filters.length) {
-        let lines = this.state.lines.concat([{
-          idx: this.logIdx++,
-          content: line,
-        }])
-        this.setState({ lines })
-      }
+      this.setState({ lines: stateLines })
     })
+  }
+
+  componentWillUpdate() {
+    const totalHeight = this.el.scrollHeight
+    const clientHeight = this.el.clientHeight
+    const scrollTop = this.el.scrollTop
+
+    this.shouldScrollToBottom = totalHeight == (scrollTop + clientHeight)
   }
 
   componentDidMount() {
@@ -42,7 +56,9 @@ class Tail extends React.Component {
   }
 
   scrollToBottom() {
-    this.el.scrollTop = this.el.scrollHeight
+    if (this.shouldScrollToBottom) {
+      this.el.scrollTop = this.el.scrollHeight
+    }
   }
 
   removeFilter(filter) {
@@ -109,7 +125,11 @@ class Tail extends React.Component {
           {
             this.state.lines.map((line) => {
               return (
-                <TailLine key={line.idx} content={line.content} />
+                <TailLine
+                  key={line.idx}
+                  file={line.file}
+                  content={line.content}
+                />
               )
             })
           }

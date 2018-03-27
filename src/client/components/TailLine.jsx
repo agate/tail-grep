@@ -2,7 +2,11 @@ import React from 'react'
 
 const TailLine = function (props) {
   return (
-    <div key={ props.idx } className="tail-line">
+    <div
+      key={ props.idx }
+      title={ props.file }
+      className="tail-line"
+    >
       { props.content }
     </div>
   )

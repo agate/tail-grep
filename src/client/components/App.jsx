@@ -28,9 +28,11 @@ class App extends React.Component {
       this.setState({ files })
     })
 
-    this.socket.on('line', (pattern, line) => {
-      let tail = this.tails[pattern]
-      if (tail) tail(line)
+    this.socket.on('lines', (patterns, file, lines) => {
+      patterns.forEach((pattern) => {
+        let tail = this.tails[pattern]
+        if (tail) tail(file, lines)
+      })
     })
   }
 
@@ -71,6 +73,7 @@ class App extends React.Component {
       )
       delete(fileNamePatterns[targetKey])
       this.setState({ fileNamePatterns })
+      this.socket.emit('untail', targetKey)
     }
   }
 
