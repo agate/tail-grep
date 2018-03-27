@@ -135,6 +135,7 @@ class Tail extends React.Component {
 
         <div className="tail-lines" ref={el => { this.el = el }}>
           <ReactList
+            threshold={ 300 }
             itemRenderer={this.renderItem.bind(this)}
             length={this.state.lines.length}
             type='uniform'
