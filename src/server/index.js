@@ -6,6 +6,7 @@ const io = require('socket.io')(http)
 const Tail = require('tail').Tail
 const glob = require('glob')
 const minimatch = require('minimatch')
+const fs = require('fs')
 
 const ROOT = path.resolve(__dirname)
 const REPO_ROOT = path.resolve(ROOT, '../..')
@@ -25,8 +26,12 @@ let SOCKET_ON_TAIL_CBS = {}
 let SOCKET_ON_ERR_CBS = {}
 
 const updateFileList = () => {
-  glob(`${TARGET_DIR}/**/*`, {}, (err, files) => {
-    FILES = files
+  glob(`${TARGET_DIR}/**/*`, {
+    nodir: true
+  }, (err, files) => {
+    FILES = files.filter((file) => {
+      return fs.statSync(file).size
+    })
     io.emit('files', FILES)
   })
 
@@ -63,6 +68,7 @@ io.on('connection', (socket) => {
         TAILS[file] = new Tail(file, {
           follow: true
         }).on('line', (line) => {
+          if (process.env.DEBUG) console.log(Date.now, '[tail][line]', fiel, line)
           for (var id in SOCKET_ON_TAIL_CBS) {
             SOCKET_ON_TAIL_CBS[id](file, line)
           }
