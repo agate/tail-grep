@@ -1,5 +1,6 @@
 import React from 'react'
 import { Input, Icon, Tag } from 'antd'
+import ReactList from 'react-list'
 
 import TailLine from './TailLine'
 
@@ -85,6 +86,17 @@ class Tail extends React.Component {
     this.setState({ filters })
   }
 
+  renderItem(index, key) {
+    let line = this.state.lines[index]
+    return (
+      <TailLine
+        key={line.idx}
+        file={line.file}
+        content={line.content}
+      />
+    )
+  }
+
   render() {
     return (
       <div className="tail">
@@ -122,17 +134,11 @@ class Tail extends React.Component {
         </div>
 
         <div className="tail-lines" ref={el => { this.el = el }}>
-          {
-            this.state.lines.map((line) => {
-              return (
-                <TailLine
-                  key={line.idx}
-                  file={line.file}
-                  content={line.content}
-                />
-              )
-            })
-          }
+          <ReactList
+            itemRenderer={this.renderItem.bind(this)}
+            length={this.state.lines.length}
+            type='uniform'
+          />
         </div>
       </div>
     )

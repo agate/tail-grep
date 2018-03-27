@@ -42,6 +42,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0",
+    "react-list": "^0.8.8",
     "reload": "^2.2.2",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.7",
