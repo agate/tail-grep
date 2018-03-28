@@ -1,15 +1,18 @@
 import React from 'react'
 
-const TailLine = function (props) {
-  return (
-    <div
-      key={ props.idx }
-      title={ props.file }
-      className="tail-line"
-    >
-      { props.content }
-    </div>
-  )
+class TailLine extends React.Component {
+  render() {
+    return (
+      <div
+        key={ this.props.idx }
+        title={ this.props.file }
+        className="tail-line"
+        style={ this.props.style }
+      >
+        { this.props.content }
+      </div>
+    )
+  }
 }
 
 export default TailLine

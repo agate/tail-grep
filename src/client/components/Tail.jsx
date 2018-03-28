@@ -1,6 +1,6 @@
 import React from 'react'
-import { Input, Icon, Tag } from 'antd'
-import ReactList from 'react-list'
+import { Input, Icon, Switch, Tag } from 'antd'
+import { List, AutoSizer } from 'react-virtualized'
 
 import TailLine from './TailLine'
 
@@ -11,6 +11,7 @@ class Tail extends React.Component {
     this.state = {
       lines: [],
       filters: {},
+      tail: true,
     }
 
     this.logIdx = 0
@@ -40,28 +41,6 @@ class Tail extends React.Component {
     })
   }
 
-  componentWillUpdate() {
-    const totalHeight = this.el.scrollHeight
-    const clientHeight = this.el.clientHeight
-    const scrollTop = this.el.scrollTop
-
-    this.shouldScrollToBottom = totalHeight == (scrollTop + clientHeight)
-  }
-
-  componentDidMount() {
-    this.scrollToBottom()
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom()
-  }
-
-  scrollToBottom() {
-    if (this.shouldScrollToBottom) {
-      this.el.scrollTop = this.el.scrollHeight
-    }
-  }
-
   removeFilter(filter) {
     const filters = JSON.parse(
       JSON.stringify(
@@ -86,15 +65,22 @@ class Tail extends React.Component {
     this.setState({ filters })
   }
 
-  renderItem(index, key) {
+  renderItems({index, isScrolling, key, style}) {
     let line = this.state.lines[index]
     return (
       <TailLine
-        key={line.idx}
+        key={key}
         file={line.file}
         content={line.content}
+        style={style}
       />
     )
+  }
+
+  onTailSwitchChange(checked) {
+    this.setState({
+      tail: checked
+    })
   }
 
   render() {
@@ -117,31 +103,47 @@ class Tail extends React.Component {
             onSearch={this.addFilter.bind(this)}
           />
 
-          {
-            Object.keys(this.state.filters).map((filter) => {
-              return (
-                <Tag
-                  key={filter}
-                  closable={true}
-                  color="#1890ff"
-                  afterClose={ () => this.removeFilter(filter) }
-                >
-                  { filter }
-                </Tag>
-              )
-            })
-          }
-        </div>
-
-        <div className="tail-lines" ref={el => { this.el = el }}>
-          <ReactList
-            threshold={ 300 }
-            itemRenderer={this.renderItem.bind(this)}
-            length={this.state.lines.length}
-            type='uniform'
-          />
-        </div>
+        {
+          Object.keys(this.state.filters).map((filter) => {
+            return (
+              <Tag
+                key={filter}
+                closable={true}
+                color="#1890ff"
+                afterClose={ () => this.removeFilter(filter) }
+              >
+                { filter }
+              </Tag>
+            )
+          })
+        }
       </div>
+
+      <div className="tail-lines">
+        <Switch
+          className="tail-switch"
+          checkedChildren="tail"
+          unCheckedChildren="off"
+          defaultChecked
+          onChange={ this.onTailSwitchChange.bind(this) }
+        />
+        <AutoSizer>
+          {({width, height}) => (
+            <List
+              ref={list => { this.list = list }}
+              className="foobar"
+              height={height}
+              width={width}
+              overscanRowCount={50}
+              rowCount={this.state.lines.length}
+              rowHeight={21}
+              scrollToIndex={this.state.tail ? this.state.lines.length-1 : -1}
+              rowRenderer={this.renderItems.bind(this)}
+            />
+          )}
+        </AutoSizer>
+      </div>
+    </div>
     )
   }
 }
