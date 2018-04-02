@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Icon, Switch, Tag } from 'antd'
+import { Input, Icon, Switch, Tag, Row, Col } from 'antd'
 import { List, AutoSizer } from 'react-virtualized'
 
 import TailLine from './TailLine'
@@ -12,6 +12,7 @@ class Tail extends React.Component {
       lines: [],
       filters: {},
       tail: true,
+      search: '',
     }
 
     this.logIdx = 0
@@ -65,6 +66,12 @@ class Tail extends React.Component {
     this.setState({ filters })
   }
 
+  search(keyword) {
+    this.setState({
+      search: keyword
+    })
+  }
+
   renderItems({index, isScrolling, key, style}) {
     let line = this.state.lines[index]
     return (
@@ -73,6 +80,7 @@ class Tail extends React.Component {
         file={line.file}
         content={line.content}
         style={style}
+        search={this.state.search}
       />
     )
   }
@@ -87,63 +95,84 @@ class Tail extends React.Component {
     return (
       <div className="tail">
         <div className="grep">
-          <Input.Search
-            prefix={
-              <Icon
-                type="filter"
-                style={{ color: 'rgba(0,0,0,.25)' }}
+          <Row>
+            <Col md={14} sm={24}>
+              <Input.Search
+                prefix={
+                  <Icon
+                    type="filter"
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                  />
+                }
+                placeholder="Grep Regex"
+                enterButton={
+                  <Icon
+                    type="plus-circle-o"
+                  />
+                }
+                onSearch={this.addFilter.bind(this)}
               />
-            }
-            placeholder="Grep Regex"
-            enterButton={
-              <Icon
-                type="plus-circle-o"
+            </Col>
+            <Col md={10} sm={24}>
+              <Input.Search
+                prefix={
+                  <Icon
+                    type="search"
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                  />
+                }
+                placeholder="Search"
+                enterButton={
+                  <Icon
+                    type="search"
+                  />
+                }
+                onSearch={this.search.bind(this)}
               />
-            }
-            onSearch={this.addFilter.bind(this)}
+            </Col>
+          </Row>
+
+          {
+            Object.keys(this.state.filters).map((filter) => {
+              return (
+                <Tag
+                  key={filter}
+                  closable={true}
+                  color="#1890ff"
+                  afterClose={ () => this.removeFilter(filter) }
+                >
+                  { filter }
+                </Tag>
+              )
+            })
+          }
+        </div>
+
+
+        <div className="tail-lines">
+          <Switch
+            className="tail-switch"
+            checkedChildren="tail"
+            unCheckedChildren="off"
+            defaultChecked
+            onChange={ this.onTailSwitchChange.bind(this) }
           />
-
-        {
-          Object.keys(this.state.filters).map((filter) => {
-            return (
-              <Tag
-                key={filter}
-                closable={true}
-                color="#1890ff"
-                afterClose={ () => this.removeFilter(filter) }
-              >
-                { filter }
-              </Tag>
-            )
-          })
-        }
+          <AutoSizer>
+            {({width, height}) => (
+              <List
+                ref={list => { this.list = list }}
+                height={height}
+                width={width}
+                overscanRowCount={50}
+                rowCount={this.state.lines.length}
+                rowHeight={21}
+                scrollToIndex={this.state.tail ? this.state.lines.length-1 : -1}
+                rowRenderer={this.renderItems.bind(this)}
+              />
+            )}
+          </AutoSizer>
+        </div>
       </div>
-
-      <div className="tail-lines">
-        <Switch
-          className="tail-switch"
-          checkedChildren="tail"
-          unCheckedChildren="off"
-          defaultChecked
-          onChange={ this.onTailSwitchChange.bind(this) }
-        />
-        <AutoSizer>
-          {({width, height}) => (
-            <List
-              ref={list => { this.list = list }}
-              className="foobar"
-              height={height}
-              width={width}
-              overscanRowCount={50}
-              rowCount={this.state.lines.length}
-              rowHeight={21}
-              scrollToIndex={this.state.tail ? this.state.lines.length-1 : -1}
-              rowRenderer={this.renderItems.bind(this)}
-            />
-          )}
-        </AutoSizer>
-      </div>
-    </div>
     )
   }
 }

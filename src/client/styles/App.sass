@@ -33,15 +33,28 @@
         margin-top: 8px
     .tail-lines
       flex: 1
+      .ReactVirtualized__List
+        overflow: auto !important
+        .ReactVirtualized__Grid__innerScrollContainer
+          overflow: visible !important
       .tail-switch
         position: absolute
         right: 20px
-        bottom: 0
+        bottom: 20px
         z-index: 999
       .tail-line
         white-space: nowrap
+
+        span.highlight
+          background-color: #faad14
+          color: #ffffff
 
         &:nth-of-type(odd)
           background-color: #f9f9f9
         &:hover
           background-color: #f5f5f5
+
+        &.highlight
+          background-color: #fffbe6
+        &:nth-of-type(odd).highlight
+          background-color: #ffe58f

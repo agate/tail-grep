@@ -1,6 +1,5 @@
 import React from 'react'
 import { Layout, Tabs, Divider, Tag, Input, Icon } from 'antd'
-import _ from 'lodash'
 import minimatch from 'minimatch'
 
 import Tail from './Tail'
@@ -144,7 +143,7 @@ class App extends React.Component {
               type="file-text"
               style={{ color: 'rgba(0,0,0,.25)' }}
             />}
-            placeholder="File Name Pattern" enterButton="Tail"
+            placeholder="Only Support File Name Glob Pattern. For example `build*/*` will match build_automation/*.log" enterButton="Tail"
             onChange={this.onFileNamePatternChange.bind(this)}
             onSearch={this.createNewTail.bind(this)}
           />
