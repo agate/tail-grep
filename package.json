@@ -22,8 +22,6 @@
     "tail": "^1.2.3"
   },
   "devDependencies": {
-    "file-loader": "^1.1.11",
-    "raw-loader": "^0.5.1",
     "antd": "^3.3.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -34,11 +32,13 @@
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "html-webpack-plugin": "webpack-contrib/html-webpack-plugin",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.1.0",
     "immutable": "^3.7.4",
     "mobx": "^4.1.0",
     "mobx-react": "^5.0.0",
     "pug-html-loader": "^1.1.5",
+    "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0",
